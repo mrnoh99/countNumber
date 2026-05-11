@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>countNumber</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #eef2ff; color: #0f172a; }
+    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+    header { text-align: center; padding: 32px 0 24px; }
+    h1 { margin: 0; font-size: 2.8rem; line-height: 1.05; color: #1e3a8a; }
+    p { margin: 20px auto 0; max-width: 720px; line-height: 1.75; color: #334155; }
+    .card { background: #ffffff; border-radius: 24px; padding: 28px; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); }
+    .app-card { margin-top: 24px; }
+    .counter-display { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 160px; margin-bottom: 20px; font-size: 5rem; font-weight: 700; color: #0f172a; border-radius: 20px; background: #f8fafc; border: 1px solid #cbd5e1; }
+    .button-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+    button { border: none; border-radius: 16px; padding: 16px 18px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    button:hover { transform: translateY(-1px); }
+    .btn-primary { background: #2563eb; color: white; box-shadow: 0 10px 22px rgba(37, 99, 235, 0.16); }
+    .btn-secondary { background: #e2e8f0; color: #0f172a; }
+    .settings { display: grid; gap: 16px; }
+    label { display: flex; flex-direction: column; gap: 10px; font-weight: 600; color: #1e293b; }
+    input[type="number"] { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 16px; font-size: 1rem; }
+    .links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+    .links a { color: #2563eb; text-decoration: none; font-weight: 700; }
+    .links a:hover { text-decoration: underline; }
+    footer { margin-top: 40px; text-align: center; color: #64748b; font-size: 0.95rem; }
+    @media (max-width: 700px) { .button-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>countNumber</h1>
+      <p>간단하고 직관적인 숫자 카운트 웹 앱입니다. 증가, 감소, 리셋 기능과 직접 값을 입력하여 빠르게 숫자 계산을 진행할 수 있습니다.</p>
+    </header>
+
+    <div class="card app-card">
+      <div class="counter-display" id="countValue">0</div>
+
+      <div class="button-row">
+        <button class="btn-secondary" id="decrement">감소</button>
+        <button class="btn-primary" id="reset">리셋</button>
+        <button class="btn-secondary" id="increment">증가</button>
+      </div>
+
+      <div class="settings">
+        <label>
+          증감 단위
+          <input type="number" id="step" value="1" min="1" step="1">
+        </label>
+        <label>
+          현재 값 직접 입력
+          <input type="number" id="manualValue" value="0">
+        </label>
+        <button class="btn-primary" id="setValue">값 설정</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h2 style="margin-top:0; color:#1e3a8a;">앱 소개</h2>
+      <p>countNumber는 숫자 세기, 목표치 체크, 메모리 없는 카운트 작업에 적합한 도구입니다. 사용자는 원하는 단위로 숫자를 조절하고 즉시 리셋할 수 있습니다.</p>
+      <div class="links">
+        <a href="support.html">지원 페이지</a>
+        <a href="#countValue">바로 사용하기</a>
+      </div>
+    </div>
+
+    <footer>
+      GitHub Pages를 통한 공개 웹 앱입니다. 문제가 있으면 support 페이지에서 알려주세요.
+    </footer>
+  </div>
+
+  <script>
+    const countValue = document.getElementById('countValue');
+    const stepInput = document.getElementById('step');
+    const manualValue = document.getElementById('manualValue');
+    let count = 0;
+
+    const updateDisplay = () => {
+      countValue.textContent = count;
+      manualValue.value = count;
+    };
+
+    const getStep = () => {
+      const step = Number(stepInput.value);
+      return Number.isFinite(step) && step >= 1 ? step : 1;
+    };
+
+    document.getElementById('increment').addEventListener('click', () => {
+      count += getStep();
+      updateDisplay();
+    });
+
+    document.getElementById('decrement').addEventListener('click', () => {
+      count -= getStep();
+      updateDisplay();
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      count = 0;
+      updateDisplay();
+    });
+
+    document.getElementById('setValue').addEventListener('click', () => {
+      const value = Number(manualValue.value);
+      if (Number.isFinite(value)) {
+        count = value;
+        updateDisplay();
+      }
+    });
+
+    manualValue.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        document.getElementById('setValue').click();
+      }
+    });
+  </script>
+</body>
+</html>
